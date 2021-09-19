@@ -197,7 +197,13 @@ class StringTable:
         def load(self, data, pos):
             self.pos = pos
             self.size_ = struct.unpack_from(self.format, data, pos)[0]
-            self.string = data[pos + 2:pos + 2 + self.size_].decode('utf-8')
+            try:        
+                self.string = data[pos + 2:pos + 2 + self.size_].decode('utf-8')
+            except UnicodeDecodeError:
+                print(data[pos + 2:pos + 2 + self.size_])
+                self.string = data[pos + 2:pos + 2 + self.size_].decode('shift-jis')
+                    
+            
 
         def save(self):
             return b''.join([
